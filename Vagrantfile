@@ -25,7 +25,16 @@ Vagrant.configure(2) do |config|
     apt update
     apt-get -y upgrade
     apt-get -y install apache2
-    sed -i "s|/var/www/html|/var/www/html/public|g" /etc/apache2/sites-available/000-default.conf
+    a2enmod rewrite
+    systemctl restart apache2.service
+
+    sed -i "s|AllowOverride None|AllowOverride All|g" /etc/apache2/apache2.conf
+    if [ ! -e /etc/apache2/sites-available/000-default.conf.bak ]; then
+      cd /etc/apache2/sites-available
+      cp 000-default.conf 000-default.conf.bak
+      cd
+      sed -i "s|/var/www/html|/var/www/html/public|g" /etc/apache2/sites-available/000-default.conf
+    fi
 
     debconf-set-selections <<< 'mysql-server mysql-server/root_password password root'
     debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password root'
