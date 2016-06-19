@@ -1,9 +1,6 @@
 <?php
-use phpunit\framework\TestCase;
-
-class Test extends TestCase{
+class Test extends PHPUnit_Framework_TestCase{
   public function testCanBePassed(){
     $this->assertEquals(true, true);
   }
-
 }
