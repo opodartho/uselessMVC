@@ -4,17 +4,19 @@ define("DS", "/");
 define("BASE_URL", realpath("../.").DS);
 
 $autoload_paths = array(
-  "application/controllers",
-  "application/models"
+    "application/controllers",
+    "application/models",
+    "application/views",
+    "system"
 );
 
 foreach($autoload_paths as $path){
-  set_include_path(get_include_path() . ":" . BASE_URL . $path);
+    set_include_path(get_include_path() . ":" . BASE_URL . $path);
 }
 
 spl_autoload_register(function ($name){
-  $filename = decamelize($name) . ".php";
-  require "$filename";
+    $filename = decamelize($name) . ".php";
+    require "$filename";
 });
 
 function decamelize($string) {
@@ -24,8 +26,13 @@ function decamelize($string) {
 $uri = $_SERVER["REQUEST_URI"];
 $params = explode("/", urldecode($uri));
 
+if($params[1] == ""){
+    require "../system/index.php";
+    exit(0);
+}
+
 $controller_name = ucfirst($params[1]) . "Controller";
-$action = $params[0];
+$action = ($params[2] != "") ? $params[2] : "index";
 
 $controller = new $controller_name();
-$controller->$action();
+$controller->execute($action);
