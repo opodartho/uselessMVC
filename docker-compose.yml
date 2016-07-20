@@ -1,0 +1,8 @@
+version: "2"
+services:
+  useless:
+    build: .
+    volumes:
+      - .:/var/www/html/
+    ports:
+      - 8888:80

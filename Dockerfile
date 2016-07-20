@@ -1,0 +1,1 @@
+FROM opodartho/uselessmvc:latest
